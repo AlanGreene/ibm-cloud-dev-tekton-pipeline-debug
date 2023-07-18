@@ -1,0 +1,41 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: run-name-pipeline-template
+spec:
+  params:
+    - name: NUMBER
+      default: 0
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: run-start-cr-$(tt.params.NUMBER)
+      spec:
+        pipelineSpec:
+          tasks:
+            - name: echo
+              taskSpec:
+                steps:
+                  - name: echo
+                    image: alpine
+                    script: |
+                      #!/usr/bin/env sh
+                      echo test
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: manual-run-name-pipeline-binding
+spec:
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: manual-run-name-listener
+spec:
+  triggers:
+    - binding:
+        name: manual-run-name-pipeline-binding
+      template:
+        name: run-name-pipeline-template
