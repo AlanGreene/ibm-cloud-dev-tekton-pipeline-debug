@@ -5,7 +5,7 @@ metadata:
 spec:
   params:
     - name: NUMBER
-      default: 0
+      default: "0"
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
